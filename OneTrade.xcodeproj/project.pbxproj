@@ -29,9 +29,22 @@
 		938F454A2DA18D54006AE297 /* OneTradeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OneTradeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		938F467C2DA1E838006AE297 /* Exceptions for "OneTrade" folder in "OneTrade" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 938F452E2DA18D52006AE297 /* OneTrade */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		938F45312DA18D52006AE297 /* OneTrade */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				938F467C2DA1E838006AE297 /* Exceptions for "OneTrade" folder in "OneTrade" target */,
+			);
 			path = OneTrade;
 			sourceTree = "<group>";
 		};
