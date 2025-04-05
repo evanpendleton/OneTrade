@@ -28,12 +28,11 @@ struct TrendView: View {
             }
         }
         .padding(.vertical, 8)
-        .padding(.horizontal, 12)
+        .padding(.horizontal, 10)
         .background(Color(.systemGray4))
         .cornerRadius(10)
     }
 }
-
 
 struct StockDetailView: View {
     @Environment(\.presentationMode) var presentationMode
@@ -44,18 +43,15 @@ struct StockDetailView: View {
     @State private var isLoading: Bool = false
     @State private var geminiResponse: String? = nil
     
-    // New state properties for trends
+    // New state properties for trends and current price
+    @State private var currentPrice: Double?
     @State private var dailyTrend: Double?
     @State private var weeklyTrend: Double?
     @State private var monthlyTrend: Double?
     @State private var threeMonthlyTrend: Double?
     
     private var headerTitle: String {
-        if let name = companyInfo?.name {
-            return name
-        } else {
-            return stock.name
-        }
+        companyInfo?.name ?? stock.name
     }
 
     var body: some View {
@@ -63,12 +59,21 @@ struct StockDetailView: View {
             ZStack(alignment: .topLeading) {
                 ScrollView {
                     VStack(alignment: .leading) {
-                        Text(headerTitle)
-                            .font(.title)
-                            .padding(.bottom, 5)
-                            .padding(.top, 50)
+                        // Display stock name and current price at the top
+                        HStack {
+                            Text(headerTitle)
+                                .font(.title)
+                            Spacer()
+                            if let price = currentPrice {
+                                Text("$\(price, specifier: "%.2f")")
+                                    .font(.title2)
+                                    .foregroundColor(.blue)
+                            }
+                        }
+                        .padding(.bottom, 5)
+                        .padding(.top, 50)
                         
-                        // Trends displayed at the top in a horizontal row
+                        // Trends displayed in a horizontal row
                         HStack(spacing: 10) {
                             TrendView(title: "Daily", value: dailyTrend)
                             TrendView(title: "Weekly", value: weeklyTrend)
@@ -131,12 +136,13 @@ struct StockDetailView: View {
                 Task {
                     await loadStockData()
                     await loadTrendData()
+                    await loadCurrentPrice()
                 }
             }
         }
     }
     
-    // Existing company info loading function
+    // Updated company info loading function using Twelve Data
     private func loadStockData() async {
         // 1) First try Polygon
         let polygonResult = await PolygonAPI.shared.getCompanyInfo(for: stock.symbol)
@@ -149,51 +155,51 @@ struct StockDetailView: View {
                 }
                 return
             }
-            print("Polygon missing description, trying Alphavantage...")
+            print("Polygon missing description, trying Twelve Data...")
         case .failure:
-            print("Polygon API failed, trying Alphavantage...")
+            print("Polygon API failed, trying Twelve Data...")
         }
         
-        // 2) Try Alphavantage
-        let alphaResult = await AlphavantageAPI.shared.getCompanyInfo(for: stock.symbol)
-        switch alphaResult {
-        case .success(let alphaInfo):
-            if !alphaInfo.description.isEmpty {
+        // 2) Try Twelve Data
+        let twelveResult = await TwelveDataAPI.shared.getCompanyInfo(for: stock.symbol)
+        switch twelveResult {
+        case .success(let info):
+            if !info.description.isEmpty {
                 DispatchQueue.main.async {
-                    self.companyInfo = alphaInfo
+                    self.companyInfo = info
                     self.isLoading = false
                 }
             } else {
-                print("Alphavantage missing description, calling Gemini...")
+                print("Twelve Data missing description, calling Gemini...")
                 let geminiResult = await GeminiService.shared.generateStockContent(stock: stock.symbol)
                 switch geminiResult {
                 case .success(let geminiText):
                     let updatedInfo = CompanyInfo(
-                        ticker: alphaInfo.ticker,
-                        name: alphaInfo.name,
-                        market: alphaInfo.market,
-                        locale: alphaInfo.locale,
-                        primary_exchange: alphaInfo.primary_exchange,
-                        type: alphaInfo.type,
-                        active: alphaInfo.active,
-                        currency_name: alphaInfo.currency_name,
-                        cik: alphaInfo.cik,
-                        composite_figi: alphaInfo.composite_figi,
-                        share_class_figi: alphaInfo.share_class_figi,
-                        market_cap: alphaInfo.market_cap,
-                        phone_number: alphaInfo.phone_number,
-                        address: alphaInfo.address,
+                        ticker: info.ticker,
+                        name: info.name,
+                        market: info.market,
+                        locale: info.locale,
+                        primary_exchange: info.primary_exchange,
+                        type: info.type,
+                        active: info.active,
+                        currency_name: info.currency_name,
+                        cik: info.cik,
+                        composite_figi: info.composite_figi,
+                        share_class_figi: info.share_class_figi,
+                        market_cap: info.market_cap,
+                        phone_number: info.phone_number,
+                        address: info.address,
                         description: geminiText,
-                        sic_code: alphaInfo.sic_code,
-                        sic_description: alphaInfo.sic_description,
-                        ticker_root: alphaInfo.ticker_root,
-                        homepage_url: alphaInfo.homepage_url,
-                        total_employees: alphaInfo.total_employees,
-                        list_date: alphaInfo.list_date,
-                        branding: alphaInfo.branding,
-                        share_class_shares_outstanding: alphaInfo.share_class_shares_outstanding,
-                        weighted_shares_outstanding: alphaInfo.weighted_shares_outstanding,
-                        round_lot: alphaInfo.round_lot
+                        sic_code: info.sic_code,
+                        sic_description: info.sic_description,
+                        ticker_root: info.ticker_root,
+                        homepage_url: info.homepage_url,
+                        total_employees: info.total_employees,
+                        list_date: info.list_date,
+                        branding: info.branding,
+                        share_class_shares_outstanding: info.share_class_shares_outstanding,
+                        weighted_shares_outstanding: info.weighted_shares_outstanding,
+                        round_lot: info.round_lot
                     )
                     DispatchQueue.main.async {
                         self.companyInfo = updatedInfo
@@ -207,7 +213,7 @@ struct StockDetailView: View {
                 }
             }
         case .failure:
-            print("Alphavantage API failed, calling Gemini as fallback...")
+            print("Twelve Data API failed, calling Gemini as fallback...")
             let geminiResult = await GeminiService.shared.generateStockContent(stock: stock.symbol)
             switch geminiResult {
             case .success(let geminiText):
@@ -224,24 +230,26 @@ struct StockDetailView: View {
         }
     }
     
-    // New function to load trend data using Alphavantage’s daily time series
+    // Updated function to load trend data using Twelve Data’s daily time series endpoint
     private func loadTrendData() async {
-        let timeSeriesResult = await AlphavantageAPI.shared.getDailyTimeSeries(for: stock.symbol)
+        let timeSeriesResult = await TwelveDataAPI.shared.getDailyTimeSeries(for: stock.symbol)
         switch timeSeriesResult {
         case .success(let response):
-            // Compute trends using sorted dates (latest first)
-            let timeSeries = response.timeSeries
-            let sortedDates = timeSeries.keys.sorted(by: >)
-            guard sortedDates.count > 1 else { return }
-            // Helper to compute percentage change
+            let timeSeries = response.values
+            // Ensure the values are sorted descending by datetime
+            let sortedValues = timeSeries.sorted { $0.datetime > $1.datetime }
+            guard sortedValues.count > 1 else { return }
+            
+            // Helper to compute percentage change between two days
             func computeTrend(offset: Int) -> Double? {
-                guard sortedDates.count > offset,
-                      let latestClose = Double(timeSeries[sortedDates[0]]?.close ?? ""),
-                      let previousClose = Double(timeSeries[sortedDates[offset]]?.close ?? "") else {
+                guard sortedValues.count > offset,
+                      let latestClose = Double(sortedValues[0].close),
+                      let previousClose = Double(sortedValues[offset].close) else {
                     return nil
                 }
                 return ((latestClose - previousClose) / previousClose) * 100
             }
+            
             // Daily (previous day), Weekly (approx. 5 trading days), Monthly (approx. 21 days), 3-Month (approx. 63 days)
             let computedDailyTrend = computeTrend(offset: 1)
             let computedWeeklyTrend = computeTrend(offset: 5)
@@ -256,6 +264,19 @@ struct StockDetailView: View {
             }
         case .failure(let error):
             print("Failed to load time series: \(error)")
+        }
+    }
+    
+    // New function to load the current price using Twelve Data's price endpoint
+    private func loadCurrentPrice() async {
+        let priceResult = await TwelveDataAPI.shared.getCurrentPrice(for: stock.symbol)
+        switch priceResult {
+        case .success(let price):
+            DispatchQueue.main.async {
+                self.currentPrice = price
+            }
+        case .failure(let error):
+            print("Failed to load current price: \(error)")
         }
     }
 }
