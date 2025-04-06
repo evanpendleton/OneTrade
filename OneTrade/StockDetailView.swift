@@ -124,6 +124,52 @@ struct StockDetailView: View {
                             TrendView(title: "3-Month", value: threeMonthlyTrend)
                         }
 
+                        // News Sentiment Section (above any summaries)
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("News Sentiment")
+                                .font(.headline)
+                            if let advice = newsAdvice {
+                                Text(advice)
+                                    .foregroundColor(.primary)
+                            } else if let err = newsError {
+                                Text("News Error: \(err)")
+                                    .foregroundColor(.red)
+                            } else {
+                                Text("Loading advice…")
+                                    .foregroundColor(.gray)
+                            }
+                        }
+                        
+                        Divider()
+                        
+                        if !priceHistory.isEmpty {
+                            Text("Price History")
+                              .font(.headline)
+                              .padding(.top)
+
+                            Chart {
+                              ForEach(priceHistory) { point in
+                                LineMark(
+                                  x: .value("Date", point.date),
+                                  y: .value("Close", point.price)
+                                )
+                              }
+                              .interpolationMethod(.monotone)
+                              .foregroundStyle(.blue.gradient)
+                            }
+                            .chartXAxis {
+                              AxisMarks(values: .stride(by: .month, count: 1)) { _ in
+                                AxisGridLine(); AxisValueLabel(format: .dateTime.month(.abbreviated))
+                              }
+                            }
+                            .chartYAxis {
+                              AxisMarks(position: .leading)
+                            }
+                            .frame(height: 200)
+                          }
+                        
+                        Divider()
+                        
                         // Company Info
                         if let info = companyInfo {
                             Text("Symbol: \(info.ticker)")
@@ -149,49 +195,6 @@ struct StockDetailView: View {
                             Text("Error: \(error)")
                                 .foregroundColor(.red)
                         }
-
-                        // News Sentiment Section (above any summaries)
-                        Divider()
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("News Sentiment")
-                                .font(.headline)
-                            if let advice = newsAdvice {
-                                Text(advice)
-                                    .foregroundColor(.primary)
-                            } else if let err = newsError {
-                                Text("News Error: \(err)")
-                                    .foregroundColor(.red)
-                            } else {
-                                Text("Loading advice…")
-                                    .foregroundColor(.gray)
-                            }
-                        }
-                        
-                        if !priceHistory.isEmpty {
-                            Text("Price History")
-                              .font(.headline)
-                              .padding(.top)
-
-                            Chart {
-                              ForEach(priceHistory) { point in
-                                LineMark(
-                                  x: .value("Date", point.date),
-                                  y: .value("Close", point.price)
-                                )
-                              }
-                              .interpolationMethod(.monotone)
-                              .foregroundStyle(.blue.gradient)
-                            }
-                            .chartXAxis {
-                              AxisMarks(values: .stride(by: .day, count: 7)) { _ in
-                                AxisGridLine(); AxisValueLabel(format: .dateTime.month(.abbreviated).day())
-                              }
-                            }
-                            .chartYAxis {
-                              AxisMarks(position: .leading)
-                            }
-                            .frame(height: 200)
-                          }
                     }
                     .padding()
                 }
