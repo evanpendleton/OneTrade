@@ -2,13 +2,13 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>FinnHubApiKey</key>
-	<string>$(FINN_HUB_API_KEY)</string>
-	<key>TwelveDataApiKey</key>
-	<string>$(TWELVE_DATA_API_KEY)</string>
-	<key>PolygonApiKey</key>
-	<string>$(POLYGON_API_KEY)</string>
 	<key>GeminiApiKey</key>
 	<string>$(GEMINI_API_KEY)</string>
+	<key>PolygonApiKey</key>
+	<string>$(POLYGON_API_KEY)</string>
+	<key>TwelveDataApiKey</key>
+	<string>$(TWELVE_DATA_API_KEY)</string>
+	<key>FinnHubApiKey</key>
+	<string>$(FINN_HUB_API_KEY)</string>
 </dict>
 </plist>
