@@ -37,7 +37,6 @@ struct ContentView: View {
         NavigationView {
             VStack {
                 SearchBar(searchText: $searchText, isSearching: $isSearching)
-                    .padding(.top)
 
                 List {
                     // Use filteredStocks which is updated by the search
