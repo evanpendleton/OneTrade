@@ -15,13 +15,13 @@ OneTrade is an iOS app developed with the idea of being an all-in-one solution f
 - Code Help - ChatGPT and Google Gemini
 
 <p align="center">
-  <img src="Images/HomePage.PNG" alt="Home Page" width="200">
+  <img src="Images/HomePage.PNG" alt="Home Page" width="300">
 </p>
 
 <p align="center">
-  <img src="Images/ExamplePage1.PNG" alt="Example of AAPL stock - Page 1" width="200">
+  <img src="Images/ExamplePage1.PNG" alt="Example of AAPL stock - Page 1" width="300">
 </p>
 
 <p align="center">
-  <img src="Images/ExamplePage2.PNG" alt="Example of AAPL stock - Page 2" width="200">
+  <img src="Images/ExamplePage2.PNG" alt="Example of AAPL stock - Page 2" width="300">
 </p>
