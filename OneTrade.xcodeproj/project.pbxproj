@@ -30,6 +30,20 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		936396132DA242920007AABB /* Exceptions for "OneTrade" folder in "OneTradeTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Secrets.xcconfig,
+			);
+			target = 938F453F2DA18D54006AE297 /* OneTradeTests */;
+		};
+		936396142DA242920007AABB /* Exceptions for "OneTrade" folder in "OneTradeUITests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Secrets.xcconfig,
+			);
+			target = 938F45492DA18D54006AE297 /* OneTradeUITests */;
+		};
 		938F467C2DA1E838006AE297 /* Exceptions for "OneTrade" folder in "OneTrade" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -44,6 +58,8 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				938F467C2DA1E838006AE297 /* Exceptions for "OneTrade" folder in "OneTrade" target */,
+				936396132DA242920007AABB /* Exceptions for "OneTrade" folder in "OneTradeTests" target */,
+				936396142DA242920007AABB /* Exceptions for "OneTrade" folder in "OneTradeUITests" target */,
 			);
 			path = OneTrade;
 			sourceTree = "<group>";
