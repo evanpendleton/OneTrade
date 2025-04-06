@@ -59,7 +59,7 @@ struct ContentView: View {
                      filterStocks(searchText: newValue)
                  }
             }
-            .navigationTitle("Stock Search")
+            .navigationTitle("OneTrade")
             // Load data when the view appears
             .onAppear(perform: loadAllStockData)
              // Use fullScreenCover for presenting the detail view
