@@ -1,8 +1,15 @@
 import SwiftUI
 import Foundation
+import Charts
 
 // MARK: - Existing API Services (Polygon, Twelve Data, Gemini)
 // Make sure you have these implemented somewhere in your project.
+
+struct PricePoint: Identifiable {
+    let id = UUID()
+    let date: Date
+    let price: Double
+}
 
 struct TrendView: View {
     let title: String
@@ -54,6 +61,7 @@ struct StockDetailView: View {
     @State private var weeklyTrend: Double?
     @State private var monthlyTrend: Double?
     @State private var threeMonthlyTrend: Double?
+    @State private var priceHistory: [PricePoint] = []
 
     // News Sentiment Analysis
     @State private var newsDecision: String? = nil       // "buy", "wait", or "sell"
@@ -158,6 +166,32 @@ struct StockDetailView: View {
                                     .foregroundColor(.gray)
                             }
                         }
+                        
+                        if !priceHistory.isEmpty {
+                            Text("Price History")
+                              .font(.headline)
+                              .padding(.top)
+
+                            Chart {
+                              ForEach(priceHistory) { point in
+                                LineMark(
+                                  x: .value("Date", point.date),
+                                  y: .value("Close", point.price)
+                                )
+                              }
+                              .interpolationMethod(.monotone)
+                              .foregroundStyle(.blue.gradient)
+                            }
+                            .chartXAxis {
+                              AxisMarks(values: .stride(by: .day, count: 7)) { _ in
+                                AxisGridLine(); AxisValueLabel(format: .dateTime.month(.abbreviated).day())
+                              }
+                            }
+                            .chartYAxis {
+                              AxisMarks(position: .leading)
+                            }
+                            .frame(height: 200)
+                          }
                     }
                     .padding()
                 }
@@ -299,12 +333,22 @@ struct StockDetailView: View {
             let computedMonthlyTrend = computeTrend(offset: 21)
             let computedThreeMonthlyTrend = computeTrend(offset: 63)
             
+            let parsed: [PricePoint] = sortedValues.compactMap { item in
+              guard
+                let close = Double(item.close),
+                let date = ISO8601DateFormatter().date(from: item.datetime + "T00:00:00Z")
+              else { return nil }
+              return PricePoint(date: date, price: close)
+            }
+            
             DispatchQueue.main.async {
+                self.priceHistory = parsed
                 self.dailyTrend = computedDailyTrend
                 self.weeklyTrend = computedWeeklyTrend
                 self.monthlyTrend = computedMonthlyTrend
                 self.threeMonthlyTrend = computedThreeMonthlyTrend
             }
+
         case .failure(let error):
             print("Failed to load time series: \(error)")
         }
