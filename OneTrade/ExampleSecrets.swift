@@ -1,0 +1,7 @@
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+
+GEMINI_API_KEY = YourApiKeyHere
+POLYGON_API_KEY = YourApiKeyHere
+TWELVE_DATA_API_KEY = YourApiKeyHere
+FINN_HUB_API_KEY = YourApiKeyHere
