@@ -6,12 +6,6 @@
 	objectVersion = 77;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		938F46A82DA21EF1006AE297 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 938F46A72DA21EF1006AE297 /* WidgetKit.framework */; };
-		938F46AA2DA21EF1006AE297 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 938F46A92DA21EF1006AE297 /* SwiftUI.framework */; };
-		938F46BB2DA21EF3006AE297 /* OneTradeWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 938F46A52DA21EF1006AE297 /* OneTradeWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-/* End PBXBuildFile section */
-
 /* Begin PBXContainerItemProxy section */
 		938F45412DA18D54006AE297 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,36 +21,12 @@
 			remoteGlobalIDString = 938F452E2DA18D52006AE297;
 			remoteInfo = OneTrade;
 		};
-		938F46B92DA21EF3006AE297 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 938F45272DA18D52006AE297 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 938F46A42DA21EF1006AE297;
-			remoteInfo = OneTradeWidgetExtension;
-		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		938F46C02DA21EF3006AE297 /* Embed Foundation Extensions */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 13;
-			files = (
-				938F46BB2DA21EF3006AE297 /* OneTradeWidgetExtension.appex in Embed Foundation Extensions */,
-			);
-			name = "Embed Foundation Extensions";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		938F452F2DA18D52006AE297 /* OneTrade.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = OneTrade.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		938F45402DA18D54006AE297 /* OneTradeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OneTradeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		938F454A2DA18D54006AE297 /* OneTradeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = OneTradeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		938F46A52DA21EF1006AE297 /* OneTradeWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OneTradeWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		938F46A72DA21EF1006AE297 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
-		938F46A92DA21EF1006AE297 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -66,13 +36,6 @@
 				Info.plist,
 			);
 			target = 938F452E2DA18D52006AE297 /* OneTrade */;
-		};
-		938F46BF2DA21EF3006AE297 /* Exceptions for "OneTradeWidget" folder in "OneTradeWidgetExtension" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = 938F46A42DA21EF1006AE297 /* OneTradeWidgetExtension */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -93,14 +56,6 @@
 		938F454D2DA18D54006AE297 /* OneTradeUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = OneTradeUITests;
-			sourceTree = "<group>";
-		};
-		938F46AB2DA21EF1006AE297 /* OneTradeWidget */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				938F46BF2DA21EF3006AE297 /* Exceptions for "OneTradeWidget" folder in "OneTradeWidgetExtension" target */,
-			);
-			path = OneTradeWidget;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -127,15 +82,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		938F46A22DA21EF1006AE297 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				938F46AA2DA21EF1006AE297 /* SwiftUI.framework in Frameworks */,
-				938F46A82DA21EF1006AE297 /* WidgetKit.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -145,8 +91,6 @@
 				938F45312DA18D52006AE297 /* OneTrade */,
 				938F45432DA18D54006AE297 /* OneTradeTests */,
 				938F454D2DA18D54006AE297 /* OneTradeUITests */,
-				938F46AB2DA21EF1006AE297 /* OneTradeWidget */,
-				938F46A62DA21EF1006AE297 /* Frameworks */,
 				938F45302DA18D52006AE297 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -157,18 +101,8 @@
 				938F452F2DA18D52006AE297 /* OneTrade.app */,
 				938F45402DA18D54006AE297 /* OneTradeTests.xctest */,
 				938F454A2DA18D54006AE297 /* OneTradeUITests.xctest */,
-				938F46A52DA21EF1006AE297 /* OneTradeWidgetExtension.appex */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		938F46A62DA21EF1006AE297 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				938F46A72DA21EF1006AE297 /* WidgetKit.framework */,
-				938F46A92DA21EF1006AE297 /* SwiftUI.framework */,
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -181,12 +115,10 @@
 				938F452B2DA18D52006AE297 /* Sources */,
 				938F452C2DA18D52006AE297 /* Frameworks */,
 				938F452D2DA18D52006AE297 /* Resources */,
-				938F46C02DA21EF3006AE297 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				938F46BA2DA21EF3006AE297 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				938F45312DA18D52006AE297 /* OneTrade */,
@@ -244,28 +176,6 @@
 			productReference = 938F454A2DA18D54006AE297 /* OneTradeUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
-		938F46A42DA21EF1006AE297 /* OneTradeWidgetExtension */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 938F46BC2DA21EF3006AE297 /* Build configuration list for PBXNativeTarget "OneTradeWidgetExtension" */;
-			buildPhases = (
-				938F46A12DA21EF1006AE297 /* Sources */,
-				938F46A22DA21EF1006AE297 /* Frameworks */,
-				938F46A32DA21EF1006AE297 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			fileSystemSynchronizedGroups = (
-				938F46AB2DA21EF1006AE297 /* OneTradeWidget */,
-			);
-			name = OneTradeWidgetExtension;
-			packageProductDependencies = (
-			);
-			productName = OneTradeWidgetExtension;
-			productReference = 938F46A52DA21EF1006AE297 /* OneTradeWidgetExtension.appex */;
-			productType = "com.apple.product-type.app-extension";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -286,9 +196,6 @@
 					938F45492DA18D54006AE297 = {
 						CreatedOnToolsVersion = 16.2;
 						TestTargetID = 938F452E2DA18D52006AE297;
-					};
-					938F46A42DA21EF1006AE297 = {
-						CreatedOnToolsVersion = 16.2;
 					};
 				};
 			};
@@ -311,7 +218,6 @@
 				938F452E2DA18D52006AE297 /* OneTrade */,
 				938F453F2DA18D54006AE297 /* OneTradeTests */,
 				938F45492DA18D54006AE297 /* OneTradeUITests */,
-				938F46A42DA21EF1006AE297 /* OneTradeWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -332,13 +238,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		938F45482DA18D54006AE297 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		938F46A32DA21EF1006AE297 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -369,13 +268,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		938F46A12DA21EF1006AE297 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -388,11 +280,6 @@
 			isa = PBXTargetDependency;
 			target = 938F452E2DA18D52006AE297 /* OneTrade */;
 			targetProxy = 938F454B2DA18D54006AE297 /* PBXContainerItemProxy */;
-		};
-		938F46BA2DA21EF3006AE297 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 938F46A42DA21EF1006AE297 /* OneTradeWidgetExtension */;
-			targetProxy = 938F46B92DA21EF3006AE297 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -689,65 +576,6 @@
 			};
 			name = Release;
 		};
-		938F46BD2DA21EF3006AE297 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = B9254WDL34;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = OneTradeWidget/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = OneTradeWidget;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = dev.evanp.ublock.Extension;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		938F46BE2DA21EF3006AE297 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = B9254WDL34;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = OneTradeWidget/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = OneTradeWidget;
-				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
-				LD_RUNPATH_SEARCH_PATHS = (
-					"$(inherited)",
-					"@executable_path/Frameworks",
-					"@executable_path/../../Frameworks",
-				);
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = dev.evanp.ublock.Extension;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -783,15 +611,6 @@
 			buildConfigurations = (
 				938F455B2DA18D54006AE297 /* Debug */,
 				938F455C2DA18D54006AE297 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		938F46BC2DA21EF3006AE297 /* Build configuration list for PBXNativeTarget "OneTradeWidgetExtension" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				938F46BD2DA21EF3006AE297 /* Debug */,
-				938F46BE2DA21EF3006AE297 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
