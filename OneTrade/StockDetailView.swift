@@ -114,7 +114,7 @@ struct StockDetailView: View {
                                 }
                             }
                         }
-                        .padding(.top, 50)
+                        .padding(.top, 100)
 
                         // Trend views
                         HStack(spacing: 10) {
@@ -384,7 +384,7 @@ struct StockDetailView: View {
         switch newsResult {
         case .success(let articles):
             let sorted = articles.sorted { $0.datetime > $1.datetime }
-            let recent = sorted.prefix(25)
+            let recent = sorted.prefix(50)
 
             // Build prompt separately
             var articlesText = ""

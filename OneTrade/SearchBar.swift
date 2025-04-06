@@ -1,9 +1,16 @@
 import SwiftUI
 
-// helper to dismiss keyboard
 extension UIApplication {
+    /// Dismisses the keyboard by finding the key window in the active scene.
     func endEditing(_ force: Bool) {
-        windows
+        // Find the foreground-active window scene
+        let scenes = connectedScenes
+            .filter { $0.activationState == .foregroundActive }
+            .compactMap { $0 as? UIWindowScene }
+
+        // From that scene, find the key window and resign first responder
+        scenes
+            .flatMap { $0.windows }
             .first { $0.isKeyWindow }?
             .endEditing(force)
     }
