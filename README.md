@@ -14,6 +14,6 @@ OneTrade is an iOS app developed with the idea of being an all-in-one solution f
 - NASDAQ and NYSE Symbols - https://github.com/rreichel3/US-Stock-Symbols/blob/main/
 - Code Help - ChatGPT and Google Gemini
 
-![Home Page](Images/Home%20Page.PNGHome Page.png)
-![Example of AAPL stock - Page 1](Images/Example%20Page%201.PNGExample Page 1.png)
-![Example of AAPL stock - Page 2](Images/Example%20Page%202.PNGExample Page 2.png)
+![Home Page](Images/HomePage.png)
+![Example of AAPL stock - Page 1](Images/ExamplePage1.PNG)
+![Example of AAPL stock - Page 2](Images/ExamplePage2.png)
