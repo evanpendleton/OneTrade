@@ -31,7 +31,7 @@ struct ContentView: View {
 
     // --- Define the names of your JSON files ---
     let primaryJsonFile = "nasdaq_full_tickers"
-    let secondaryJsonFile = "nyse_full_tickers" // <<< Change this if your second file has a different name
+    let secondaryJsonFile = "nyse_full_tickers"
 
     var body: some View {
         NavigationView {

@@ -59,6 +59,18 @@ struct StockDetailView: View {
     @State private var newsAdvice: String? = nil         // full explanation text
     @State private var newsError: String? = nil
     @State private var newsPrompt: String? = nil         // prompt sent to AI
+    
+    // MARK: – Decision Color Helper
+    private var decisionColor: Color {
+        switch newsDecision?.lowercased() {
+        case "buy":
+            return .green
+        case "sell":
+            return .red
+        default:
+            return .white   // for "wait" or any other state
+        }
+    }
 
     private var headerTitle: String {
         companyInfo?.name ?? stock.name
@@ -83,7 +95,7 @@ struct StockDetailView: View {
                                     // Decision bubble
                                     Text(newsDecision ?? "Loading advice...")
                                         .font(.caption)
-                                        .foregroundColor(.white)
+                                        .foregroundColor(decisionColor)
                                         .padding(.vertical, 6)
                                         .padding(.horizontal, 10)
                                         .background(Color(.systemGray4))
