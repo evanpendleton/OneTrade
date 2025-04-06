@@ -3,13 +3,11 @@ import Foundation
 
 // MARK: - Existing API Services (Polygon, Twelve Data, Gemini)
 // Make sure you have these implemented somewhere in your project.
- 
-// Example: TwelveDataAPI, GeminiService, PolygonAPI are assumed to exist as per your previous code.
 
 struct TrendView: View {
     let title: String
     let value: Double?
-    
+
     var body: some View {
         VStack(spacing: 4) {
             Text(title)
@@ -42,23 +40,25 @@ struct StockDetailView: View {
     @Environment(\.presentationMode) var presentationMode
     let stock: Stock
     let onDismiss: () -> Void
-    
+
     // Company info and API responses
     @State private var companyInfo: CompanyInfo? = nil
     @State private var infoError: String? = nil
     @State private var isLoading: Bool = false
     @State private var geminiResponse: String? = nil
-    
+
     // Price and trend data
     @State private var currentPrice: Double?
     @State private var dailyTrend: Double?
     @State private var weeklyTrend: Double?
     @State private var monthlyTrend: Double?
     @State private var threeMonthlyTrend: Double?
-    
-    // New state for news sentiment analysis
-    @State private var newsSentiment: String? = nil
+
+    // News Sentiment Analysis
+    @State private var newsDecision: String? = nil       // "buy", "wait", or "sell"
+    @State private var newsAdvice: String? = nil         // full explanation text
     @State private var newsError: String? = nil
+    @State private var newsPrompt: String? = nil         // prompt sent to AI
 
     private var headerTitle: String {
         companyInfo?.name ?? stock.name
@@ -69,27 +69,38 @@ struct StockDetailView: View {
             ZStack(alignment: .topLeading) {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 15) {
-                        // Header: Stock name and current price
-                        HStack {
+                        // Header: Stock name, price, and decision bubble
+                        HStack(spacing: 12) {
                             Text(headerTitle)
                                 .font(.title)
                             Spacer()
                             if let price = currentPrice {
-                                Text("$\(price, specifier: "%.2f")")
-                                    .font(.title2)
-                                    .foregroundColor(.blue)
+                                HStack(spacing: 8) {
+                                    Text("$\(price, specifier: "%.2f")")
+                                        .font(.title2)
+                                        .foregroundColor(.blue)
+
+                                    // Decision bubble
+                                    Text(newsDecision ?? "Loading advice...")
+                                        .font(.caption)
+                                        .foregroundColor(.white)
+                                        .padding(.vertical, 6)
+                                        .padding(.horizontal, 10)
+                                        .background(Color(.systemGray4))
+                                        .cornerRadius(12)
+                                }
                             }
                         }
                         .padding(.top, 50)
-                        
-                        // Trend views (daily, weekly, monthly, 3-month)
+
+                        // Trend views
                         HStack(spacing: 10) {
                             TrendView(title: "Daily", value: dailyTrend)
                             TrendView(title: "Weekly", value: weeklyTrend)
                             TrendView(title: "Monthly", value: monthlyTrend)
                             TrendView(title: "3-Month", value: threeMonthlyTrend)
                         }
-                        
+
                         // Company Info
                         if let info = companyInfo {
                             Text("Symbol: \(info.ticker)")
@@ -115,22 +126,27 @@ struct StockDetailView: View {
                             Text("Error: \(error)")
                                 .foregroundColor(.red)
                         }
-                        
-                        // News Sentiment Section
-                        if let sentiment = newsSentiment {
-                            Divider()
+
+                        // News Sentiment Section (above any summaries)
+                        Divider()
+                        VStack(alignment: .leading, spacing: 8) {
                             Text("News Sentiment")
                                 .font(.headline)
-                            Text(sentiment)
-                                .foregroundColor(.purple)
-                        } else if let newsErr = newsError {
-                            Text("News Error: \(newsErr)")
-                                .foregroundColor(.red)
+                            if let advice = newsAdvice {
+                                Text(advice)
+                                    .foregroundColor(.white)
+                            } else if let err = newsError {
+                                Text("News Error: \(err)")
+                                    .foregroundColor(.red)
+                            } else {
+                                Text("Loading advice…")
+                                    .foregroundColor(.gray)
+                            }
                         }
                     }
                     .padding()
                 }
-                
+
                 // Dismiss Button
                 Button {
                     onDismiss()
@@ -156,9 +172,9 @@ struct StockDetailView: View {
             }
         }
     }
-    
+
     // MARK: - API Loading Functions
-    
+
     private func loadStockData() async {
         // Try Polygon API first
         let polygonResult = await PolygonAPI.shared.getCompanyInfo(for: stock.symbol)
@@ -290,9 +306,9 @@ struct StockDetailView: View {
             print("Failed to load current price: \(error)")
         }
     }
-    
+
     // MARK: - News Sentiment Analysis via Finnhub & Gemini
-    
+
     private func loadNewsSentiment() async {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
@@ -300,36 +316,32 @@ struct StockDetailView: View {
         guard let threeMonthsAgo = Calendar.current.date(byAdding: .month, value: -3, to: today) else { return }
         let toDate = dateFormatter.string(from: today)
         let fromDate = dateFormatter.string(from: threeMonthsAgo)
-        
+
         // Fetch news articles from Finnhub
         let newsResult = await FinnhubNewsService.shared.getCompanyNews(for: stock.symbol, from: fromDate, to: toDate)
         switch newsResult {
         case .success(let articles):
-            let sortedArticles = articles.sorted { $0.datetime > $1.datetime }
-            let maxArticles = 25
-            let articlesToSend = sortedArticles.prefix(maxArticles)
-            
-            // Build Gemini prompt using titles and summaries
-            var articlesText = ""
-            for (index, article) in articlesToSend.enumerated() {
-                articlesText += "\(index + 1). Title: \(article.headline)\n"
-                let summaryText = (article.summary?.isEmpty == false) ? article.summary! : "No Summary Available."
-                articlesText += "   Summary: \(summaryText)\n\n"
-            }
-            
-            let geminiPrompt = """
-            Would you buy, wait, or sell \(stock.symbol) stock right now. Respond with a single word: "buy", "wait", or "sell", followed by a brief explanation of your reasoning. Do not include any direct quotes.
+            let sorted = articles.sorted { $0.datetime > $1.datetime }
+            let recent = sorted.prefix(25)
 
-            Use the following recent news articles to support your decision:
-            \(articlesText)
-            """
-            
-            // Call Gemini API to analyze sentiment
-            let geminiResult = await GeminiService.shared.generateContent(prompt: geminiPrompt)
+            // Build prompt separately
+            var articlesText = ""
+            for (i, article) in recent.enumerated() {
+                let summary = (article.summary?.isEmpty == false) ? article.summary! : "No Summary Available."
+                articlesText += "\(i+1). Title: \(article.headline)\n   Summary: \(summary)\n\n"
+            }
+
+            let prompt = "Would you buy, wait, or sell \(stock.symbol) stock right now? Respond with a single word (\"Buy\", \"Wait\", or \"Sell\") followed by a brief explanation. Use the following recent news articles to support your decision, but don't mention them at all. Repeat don't mention the articles expect by saying recent events and what the events are. Also, don't report any weird formatting just return plain text and don't add any extra punctation to the advice of the buy, wait, sell. A sample prompt is provided below:\n\nSample:\nBuy\nThis stock is crazy hot right now and needs to be bought.\n\(articlesText)"
+            DispatchQueue.main.async { self.newsPrompt = prompt }
+
+            // Call Gemini API
+            let geminiResult = await GeminiService.shared.generateContent(prompt: prompt)
             switch geminiResult {
             case .success(let responseText):
+                let parts = responseText.split(separator: "\n", maxSplits: 1)
                 DispatchQueue.main.async {
-                    self.newsSentiment = responseText
+                    self.newsDecision = parts.first.map { String($0).capitalized }
+                    self.newsAdvice = parts.count > 1 ? String(parts[1]) : responseText
                 }
             case .failure(let error):
                 DispatchQueue.main.async {
