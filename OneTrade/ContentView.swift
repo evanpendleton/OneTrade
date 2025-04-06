@@ -54,9 +54,10 @@ struct ContentView: View {
                 }
                 .listStyle(.plain)
                 // Use the new Combine-based search filtering
-                .onChange(of: searchText) { newValue in
-                     filterStocks(searchText: newValue)
-                 }
+                .onChange(of: searchText) {
+                    filterStocks(searchText: searchText)
+                }
+
             }
             .navigationTitle("OneTrade")
             // Load data when the view appears

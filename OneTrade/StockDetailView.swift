@@ -12,7 +12,8 @@ struct TrendView: View {
         VStack(spacing: 4) {
             Text(title)
                 .font(.caption)
-                .foregroundColor(.white)
+                .foregroundColor(.secondary)
+
             if let value = value {
                 HStack(alignment: .firstTextBaseline, spacing: 1) {
                     Text("\(value, specifier: "%.1f")")
@@ -26,12 +27,12 @@ struct TrendView: View {
             } else {
                 Text("N/A")
                     .font(.headline)
-                    .foregroundColor(.gray)
+                    .foregroundColor(.secondary)
             }
         }
         .padding(.vertical, 8)
         .padding(.horizontal, 10)
-        .background(Color(.systemGray4))
+        .background(Color(.secondarySystemBackground))
         .cornerRadius(10)
     }
 }
@@ -68,7 +69,7 @@ struct StockDetailView: View {
         case "sell":
             return .red
         default:
-            return .white   // for "wait" or any other state
+            return .primary   // for "wait" or any other state
         }
     }
 
@@ -85,20 +86,22 @@ struct StockDetailView: View {
                         HStack(spacing: 12) {
                             Text(headerTitle)
                                 .font(.title)
+                                .foregroundColor(.primary)
+
                             Spacer()
+
                             if let price = currentPrice {
                                 HStack(spacing: 8) {
                                     Text("$\(price, specifier: "%.2f")")
                                         .font(.title2)
-                                        .foregroundColor(.blue)
+                                        .foregroundColor(.accentColor)
 
-                                    // Decision bubble
-                                    Text(newsDecision ?? "Loading advice...")
+                                    Text(newsDecision ?? "Loading advice…")
                                         .font(.caption)
                                         .foregroundColor(decisionColor)
                                         .padding(.vertical, 6)
                                         .padding(.horizontal, 10)
-                                        .background(Color(.systemGray4))
+                                        .background(Color(.secondarySystemBackground))
                                         .cornerRadius(12)
                                 }
                             }
@@ -146,7 +149,7 @@ struct StockDetailView: View {
                                 .font(.headline)
                             if let advice = newsAdvice {
                                 Text(advice)
-                                    .foregroundColor(.white)
+                                    .foregroundColor(.primary)
                             } else if let err = newsError {
                                 Text("News Error: \(err)")
                                     .foregroundColor(.red)
@@ -343,7 +346,14 @@ struct StockDetailView: View {
                 articlesText += "\(i+1). Title: \(article.headline)\n   Summary: \(summary)\n\n"
             }
 
-            let prompt = "Would you buy, wait, or sell \(stock.symbol) stock right now? Respond with a single word (\"Buy\", \"Wait\", or \"Sell\") followed by a brief explanation. Use the following recent news articles to support your decision, but don't mention them at all. Repeat don't mention the articles expect by saying recent events and what the events are. Also, don't report any weird formatting just return plain text and don't add any extra punctation to the advice of the buy, wait, sell. A sample prompt is provided below:\n\nSample:\nBuy\nThis stock is crazy hot right now and needs to be bought.\n\(articlesText)"
+            let prompt = """
+                Would you Buy, Wait, or Sell \(stock.symbol) stock right now? Respond with a single word ("Buy", "Wait", or "Sell") followed by a brief explanation. Do not mention the articles directly—only refer to them as "recent events" and summarize their impact. Keep the response in plain text without extra formatting or punctuation.
+
+                Example response format:  
+                Buy  
+                This stock is surging due to strong earnings and positive market sentiment.  
+                \n\(articlesText)
+            """
             DispatchQueue.main.async { self.newsPrompt = prompt }
 
             // Call Gemini API

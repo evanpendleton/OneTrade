@@ -1,52 +1,81 @@
 import SwiftUI
 
+// helper to dismiss keyboard
+extension UIApplication {
+    func endEditing(_ force: Bool) {
+        windows
+            .first { $0.isKeyWindow }?
+            .endEditing(force)
+    }
+}
+
 struct SearchBar: View {
     @Binding var searchText: String
     @Binding var isSearching: Bool
 
+    @FocusState private var isFocused: Bool
+
     var body: some View {
-        HStack {
+        ZStack {
+            // translucent full‑screen tappable layer when searching
+            if isSearching {
+                Color.black.opacity(0.001) // invisible but catches taps
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        // dismiss everything
+                        isSearching = false
+                        isFocused = false
+                        UIApplication.shared.endEditing(true)
+                    }
+            }
+
             HStack {
-                Image(systemName: "magnifyingglass")
-                    .foregroundColor(.gray)
-                    .padding(.leading, 8)
+                HStack {
+                    Image(systemName: "magnifyingglass")
+                        .foregroundColor(.gray)
+                        .padding(.leading, 8)
 
-                TextField("Search Stock…", text: $searchText)
-                    .disableAutocorrection(true)            // iOS 15 compatibility
-                    .autocorrectionDisabled(true)           // iOS 16+
-                    .textInputAutocapitalization(.never)
-                    .padding(7)
-                    .padding(.horizontal, 2)
-                    .background(Color(.systemGray6))
-                    .cornerRadius(8)
+                    TextField("Search Stock…", text: $searchText)
+                        .disableAutocorrection(true)
+                        .autocorrectionDisabled(true)
+                        .textInputAutocapitalization(.never)
+                        .padding(7)
+                        .padding(.horizontal, 2)
+                        .background(Color(.systemGray6))
+                        .cornerRadius(8)
+                        .focused($isFocused)           // bind focus state
+                        .onTapGesture {
+                            // enter searching mode when tapped
+                            isSearching = true
+                        }
 
-                if isSearching && !searchText.isEmpty {
-                    Button {
-                        searchText = ""
-                    } label: {
-                        Image(systemName: "multiply.circle.fill")
-                            .foregroundColor(.gray)
-                            .padding(.trailing, 8)
+                    // always show clear button if there's text
+                    if !searchText.isEmpty {
+                        Button {
+                            searchText = ""
+                        } label: {
+                            Image(systemName: "multiply.circle.fill")
+                                .foregroundColor(.gray)
+                                .padding(.trailing, 8)
+                        }
                     }
                 }
-            }
-            .background(Color(.systemGray6))
-            .cornerRadius(8)
+                .background(Color(.systemGray6))
+                .cornerRadius(8)
 
-            if isSearching {
-                Button("Cancel") {
-                    isSearching = false
-                    searchText = ""
-                    UIApplication.shared.sendAction(
-                        #selector(UIResponder.resignFirstResponder),
-                        to: nil, from: nil, for: nil
-                    )
+                if isSearching {
+                    Button("Cancel") {
+                        isSearching = false
+                        searchText = ""
+                        isFocused = false
+                        UIApplication.shared.endEditing(true)
+                    }
+                    .padding(.leading, 8)
+                    .transition(.move(edge: .trailing))
+                    .animation(.default, value: isSearching)
                 }
-                .padding(.leading, 8)
-                .transition(.move(edge: .trailing))
-                .animation(.default, value: isSearching)
             }
+            .padding(.horizontal)
         }
-        .padding(.horizontal)
     }
 }
